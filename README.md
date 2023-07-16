@@ -2,6 +2,7 @@
 ## Team Members
 Ben Hicks - Team Lead
 Srishant Burdhan - Developer
+Drew Spampinato- Co-Developer
 
 ## Summary
 a Tetris game in Phaser whose background and color palette change with the temperature outside by utilizing the Weatherbit API.
