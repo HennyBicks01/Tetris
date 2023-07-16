@@ -1,7 +1,9 @@
 # Tetris
 ## Team Members
 Ben Hicks - Team Lead
+
 Srishant Burdhan - Developer
+
 Drew Spampinato- Co-Developer
 
 ## Summary
