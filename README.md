@@ -6,6 +6,8 @@ Srishant Burdhan - Developer
 
 Drew Spampinato- Co-Developer
 
+Grace Nordwick - Co-developer
+
 ## Summary
 a Tetris game in Phaser whose background and color palette change with the temperature outside by utilizing the Weatherbit API.
 
