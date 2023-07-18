@@ -2,7 +2,7 @@
 ## Team Members
 Ben Hicks - Team Lead
 
-Srishant Burdhan - Developer
+Srishant Burdhan - Co-Developer
 
 Drew Spampinato- Co-Developer
 
