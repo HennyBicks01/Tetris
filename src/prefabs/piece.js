@@ -1,7 +1,8 @@
 import { SHAPES, SHAPE_SPAWN } from './constants.js';
+import WeatherAPI from './WeatherAPI.js';
 
 export default class Piece {
-    constructor(scene, pieceType, tableArray) {
+    constructor(scene, pieceType, tableArray, tint) {
         this.scene = scene;
         this.tableArray = tableArray;
 
@@ -14,6 +15,7 @@ export default class Piece {
         this.frame = [];
         this.color = 0;
         this.type = pieceType;
+        this.tint = 0xffffff;
 
         this.init();
     }
@@ -27,19 +29,7 @@ export default class Piece {
         this.initShape();
         this.setSize();
         this.initPosition();
-    }
-
-    setTintBasedOnTemp(temp) {
-        let tint;
-        if (temp <= 0) {
-            tint = 0x0000ff; // Blue for cold temperatures
-        } else if (temp >= 30) {
-            tint = 0xff0000; // Red for hot temperatures
-        } else {
-            tint = 0xffff00; // Yellow for moderate temperatures
-        }
-        // Assuming this.sprite is a Phaser.GameObjects.Sprite object representing the piece
-        this.sprite.setTint(tint);
+        this.setTintBasedOnTemp();
     }
 
     initColor() {
@@ -89,6 +79,34 @@ export default class Piece {
         this.height = this.frame.length;
     }
 
+
+    async setTintBasedOnTemp() {
+        // Fetch the temperature from the WeatherAPI
+        const weather = await WeatherAPI.getCurrentWeather();
+        const temp = weather.temp;
+
+        // Define the RGB values for the cold and hot colors
+        const coldColor = { r: 0, g: 0, b: 255 }; // Blue
+        const hotColor = { r: 255, g: 0, b: 0 }; // Red
+
+        // Define the temperature range
+        const minTemp = -10;
+        const maxTemp = 40;
+
+        // Clamp the temperature to the defined range
+        const clampedTemp = Math.max(minTemp, Math.min(maxTemp, temp));
+
+        // Normalize the temperature to a value between 0 and 1
+        const normalizedTemp = (clampedTemp - minTemp) / (maxTemp - minTemp);
+
+        // Interpolate between the cold and hot colors based on the normalized temperature
+        const r = Math.round(Phaser.Math.Linear(coldColor.r, hotColor.r, normalizedTemp));
+        const g = Math.round(Phaser.Math.Linear(coldColor.g, hotColor.g, normalizedTemp));
+        const b = Math.round(Phaser.Math.Linear(coldColor.b, hotColor.b, normalizedTemp));
+
+        // Convert the RGB color to a Phaser color tint
+        this.tint = Phaser.Display.Color.GetColor(r, g, b);
+    }
 
     /**
      * Checks piece frame on the table space for collisions.

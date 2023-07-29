@@ -2,6 +2,7 @@ import Table from '../prefabs/table.js';
 import Controls from '../prefabs/controls.js';
 import Piece from '../prefabs/piece.js';
 import * as h from '../prefabs/helpers.js';
+import weatherAPI from '../prefabs/weatherAPI.js'
 
 import {
     GRAVITY_LEVELS,
@@ -11,8 +12,6 @@ import {
     COOKIE_LAST,
     COOKIE_TOP
 } from '../prefabs/constants.js';
-
-
 
 export default class InGame extends Phaser.Scene {
     constructor() {
@@ -51,7 +50,7 @@ export default class InGame extends Phaser.Scene {
         this.table = new Table(this);
 
         // Piece (tetromino)
-        this.piece = new Piece(this, this.pieceQueue.current, this.table.colorsArray);
+        this.piece = new Piece(this, this.pieceQueue.current, this.table.colorsArray, this.tint);
         this.piece.print();
         this.table.update();
 
