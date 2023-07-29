@@ -29,8 +29,21 @@ export default class Piece {
         this.initPosition();
     }
 
+    setTintBasedOnTemp(temp) {
+        let tint;
+        if (temp <= 0) {
+            tint = 0x0000ff; // Blue for cold temperatures
+        } else if (temp >= 30) {
+            tint = 0xff0000; // Red for hot temperatures
+        } else {
+            tint = 0xffff00; // Yellow for moderate temperatures
+        }
+        // Assuming this.sprite is a Phaser.GameObjects.Sprite object representing the piece
+        this.sprite.setTint(tint);
+    }
+
     initColor() {
-        this.color = Phaser.Math.Between(1, 5);
+        this.color = 1;
     }
 
     initPosition() {

@@ -1,0 +1,11 @@
+class WeatherAPI {
+    constructor(apiKey) {
+        this.apiKey = 'd78383fe2a464ec38e68e5e0712d2a42';
+    }
+
+    async getCurrentWeather(lat, lon) {
+        const response = await fetch(`https://api.weatherbit.io/v2.0/current?lat=${lat}&lon=${lon}&key=${this.apiKey}`);
+        const data = await response.json();
+        return data.data[0];
+    }
+}
