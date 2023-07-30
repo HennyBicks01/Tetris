@@ -19,34 +19,34 @@ export default class InGame extends Phaser.Scene {
     }
 
     init() {
+        // Initialize scene-specific properties
         this.pieceQueue = { current: 0, next: 0 };
         this.initPieceQueue();
         this.stepDelay = GRAVITY_LEVELS[0] * MILLISECONDS_PER_FRAME; // 48 frames per cell in level 0
         this.score = 0;
         this.isGameOver = false;
     }
-
+        // The create method is called automatically by Phaser when the scene is created
     create() {
-
+       // Load weather data asynchronously (data from a weather API)
         this.loadWeatherData();
-
+        // Create the game elements and initialize them
         this.table = new Table(this);
-        const tintValue = 0x9a2a33; // Replace this with the desired tint color
+        const tintValue = 0x9a2a33; 
         this.piece = new Piece(this, this.pieceQueue.current, this.table.colorsArray, this.tint);
         this.piece.print();
         this.table.update();
-
-        // Emitter
+        // Create a custom event emitter for handling game events
         this.customEmitter = new Phaser.Events.EventEmitter();
         const customEmitter = this.customEmitter;
 
         // Background
         this.add.image(100, 20, 'atlas', 'background').setOrigin(0);
 
-        // UI
+        // Create and display the game UI
         this.createUi();
 
-        // Transparent layer for effects
+         // Other game elements and logic
         this.ui_mask = this.add.image(214, 12, 'atlas', 'white')
             .setOrigin(0)
             .setDisplaySize(220, 172)

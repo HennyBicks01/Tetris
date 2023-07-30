@@ -1,5 +1,6 @@
 import { getCookie } from "../prefabs/helpers.js";
 import { COOKIE_TOP } from "../prefabs/constants.js";
+
 export default class Menu extends Phaser.Scene {
     constructor() {
         super('menu');
@@ -20,6 +21,7 @@ export default class Menu extends Phaser.Scene {
         // Menu contents
         this.createContents();
 
+        // Create a separate camera for the menu to enable panning between sections
         this.menuCamera = this.cameras.add(121, 195, 406, 770, false)
             .setOrigin(0)
             .setBounds(2000, 2000, 3 * 406, 770)
@@ -36,6 +38,7 @@ export default class Menu extends Phaser.Scene {
         this.createControls(originX + 2 * snapPadding, originY);
     }
 
+    // Create the main menu section
     createMenu(originX, originY) {
         const centerX = originX + 406 / 2;
         const originYbt = originY + 300;
@@ -65,6 +68,7 @@ export default class Menu extends Phaser.Scene {
 
     }
 
+    // Create the credits section
     createCredits(originX, originY) {
         const centerX = originX + 406 / 2;
 
@@ -79,6 +83,7 @@ export default class Menu extends Phaser.Scene {
 
     }
 
+    // Create the controls section
     createControls(originX, originY) {
         const centerX = originX + 406 / 2;
 
