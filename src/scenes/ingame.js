@@ -21,7 +21,7 @@ export default class InGame extends Phaser.Scene {
     init() {
         this.pieceQueue = { current: 0, next: 0 };
         this.initPieceQueue();
-        this.stepDelay = GRAVITY_LEVELS[0] * MILLISECONDS_PER_FRAME; // 48 frames per cell in level 0
+        this.stepDelay = GRAVITY_LEVELS[0] * MILLISECONDS_PER_FRAME; 
         this.score = 0;
         this.isGameOver = false;
     }
@@ -31,40 +31,24 @@ export default class InGame extends Phaser.Scene {
         this.loadWeatherData();
 
         this.table = new Table(this);
-        const tintValue = 0x9a2a33; // Replace this with the desired tint color
+        const tintValue = 0x9a2a33; 
         this.piece = new Piece(this, this.pieceQueue.current, this.table.colorsArray, this.tint);
         this.piece.print();
         this.table.update();
-
-        // Emitter
         this.customEmitter = new Phaser.Events.EventEmitter();
         const customEmitter = this.customEmitter;
-
-        // Background
         this.add.image(100, 20, 'atlas', 'background').setOrigin(0);
-
-        // UI
         this.createUi();
-
-        // Transparent layer for effects
         this.ui_mask = this.add.image(214, 12, 'atlas', 'white')
             .setOrigin(0)
             .setDisplaySize(220, 172)
             .setAlpha(0);
-
-        // Board
         this.add.image(0, 0, 'atlas', 'table').setOrigin(0);
-
         this.table = new Table(this);
-
-        // Piece (tetromino)
         this.piece = new Piece(this, this.pieceQueue.current, this.table.colorsArray, this.tint);
         this.piece.print();
         this.table.update();
-
         this.controls = new Controls(this);
-
-        //// Sounds
         this.snd_explosion = this.sound.add('explosion');
         this.snd_line = this.sound.add('line');
         this.snd_spin = this.sound.add('spin').setVolume(0.8);
