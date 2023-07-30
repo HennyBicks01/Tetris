@@ -92,8 +92,9 @@ export default class Piece {
     
             const temp = weatherData.temp_c; // Use temp_c for temperature in Celsius, or temp_f for Fahrenheit
     
-            // Define the RGB values for the cold and hot colors
+            // Define the RGB values for the cold, moderate, and hot colors
             const coldColor = { r: 0, g: 0, b: 255 }; // Blue
+            const moderateColor = { r: 0, g: 255, b: 0 }; // Green
             const hotColor = { r: 255, g: 0, b: 0 }; // Red
     
             // Define the temperature range
@@ -107,10 +108,29 @@ export default class Piece {
             const normalizedTemp = (clampedTemp - minTemp) / (maxTemp - minTemp);
             console.log('Normalized Temperature:', normalizedTemp);
     
-            // Interpolate between the cold and hot colors based on the normalized temperature
-            const r = Math.round(Phaser.Math.Linear(coldColor.r, hotColor.r, normalizedTemp));
-            const g = Math.round(Phaser.Math.Linear(coldColor.g, hotColor.g, normalizedTemp));
-            const b = Math.round(Phaser.Math.Linear(coldColor.b, hotColor.b, normalizedTemp));
+            let r, g, b;
+    
+            // If the normalized temperature is in the first half of the range (0.0 to 0.5)
+            if (normalizedTemp <= 0.5) {
+                // Adjust the normalized temperature to the range 0.0 to 1.0
+                const adjustedTemp = normalizedTemp * 2;
+    
+                // Interpolate between the hot and moderate colors based on the adjusted temperature
+                r = Math.round(Phaser.Math.Linear(hotColor.r, moderateColor.r, adjustedTemp));
+                g = Math.round(Phaser.Math.Linear(hotColor.g, moderateColor.g, adjustedTemp));
+                b = Math.round(Phaser.Math.Linear(hotColor.b, moderateColor.b, adjustedTemp));
+            } 
+            // If the normalized temperature is in the second half of the range (0.5 to 1.0)
+            else {
+                // Adjust the normalized temperature to the range 0.0 to 1.0
+                const adjustedTemp = (normalizedTemp - 0.5) * 2;
+    
+                // Interpolate between the moderate and cold colors based on the adjusted temperature
+                r = Math.round(Phaser.Math.Linear(moderateColor.r, coldColor.r, adjustedTemp));
+                g = Math.round(Phaser.Math.Linear(moderateColor.g, coldColor.g, adjustedTemp));
+                b = Math.round(Phaser.Math.Linear(moderateColor.b, coldColor.b, adjustedTemp));
+            }
+    
             console.log('r:', r, 'g:', g, 'b:', b);
     
             // Convert the RGB color to a Phaser color tint
