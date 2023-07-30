@@ -4,11 +4,11 @@ import { SHAPES, SHAPE_SPAWN } from './constants.js';
 import { PIECE_TYPES } from './constants.js'
 import WeatherAPI from './weatherAPI.js';
 export default class Piece {
-    constructor(scene, pieceType, tableArray, tint) {
+    constructor(scene, pieceType, tableArray, weather) {
         this.scene = scene;
         this.tableArray = tableArray;
         this.type = pieceType;
-
+    
         this.width = 0;
         this.height = 0;
         this.x = 0;
@@ -18,8 +18,10 @@ export default class Piece {
         this.frame = [];
         this.color = 0;
         this.tint = 0xffffff;
+        this.tiles = []; // Initialize this.tiles
         this.init();
     }
+    
 
     init(type) {
         this.rotation = 0;
@@ -88,7 +90,7 @@ export default class Piece {
             const weatherData = await WeatherAPI.getCurrentWeather();
             console.log('Weather Data:', weatherData);
     
-            const temp = weatherData.temp;
+            const temp = weatherData.temp_c; // Use temp_c for temperature in Celsius, or temp_f for Fahrenheit
     
             // Define the RGB values for the cold and hot colors
             const coldColor = { r: 0, g: 0, b: 255 }; // Blue
@@ -117,7 +119,6 @@ export default class Piece {
             console.error(error);
         }
     }
-    
 
     /**
      * Checks piece frame on the table space for collisions.
@@ -143,19 +144,15 @@ export default class Piece {
         this.print(true)
     }
 
-    print() {
-        this.shape[PIECE_TYPES[this.type]].forEach((row, y) => {
-            row.forEach((value, x) => {
-                if (value) {
-                    const tile = this.scene.add.image(
-                        this.x + x * this.cellSize,
-                        this.y + y * this.cellSize,
-                        'atlas',
-                        PIECE_TYPES[this.type] // Use the PIECE_TYPES constant here
-                    );
-                    // Apply the tint to the tile
-                    tile.setTint(this.tint);
-                    this.tiles.push(tile);
+    print(isDelete = false) {
+        const table = this.tableArray;
+        this.frame.forEach((row, rowIndex) => {
+            row.forEach((v, columnIndex) => {
+                let position = this.localToTable(columnIndex, rowIndex);
+                if (v && !isDelete && position.y <= this.scene.table.topVisibleRow) {
+                    table[position.y][position.x] = this.tint;
+                } else if (v && isDelete) {
+                    table[position.y][position.x] = 0;
                 }
             });
         });

@@ -32,7 +32,7 @@ export default class InGame extends Phaser.Scene {
 
         this.table = new Table(this);
         const tintValue = 0x9a2a33; // Replace this with the desired tint color
-        this.piece = new Piece(this, this.pieceQueue.current, this.table.colorsArray, tintValue);
+        this.piece = new Piece(this, this.pieceQueue.current, this.table.colorsArray, this.tint);
         this.piece.print();
         this.table.update();
 
@@ -110,7 +110,7 @@ export default class InGame extends Phaser.Scene {
     async loadWeatherData() {
         try {
             const weatherData = await WeatherAPI.getCurrentWeather();
-            this.weatherTemperature = weatherData.temp;
+            this.weatherTemperature = weatherData.temp_c; // Use temp_c for temperature in Celsius, or temp_f for Fahrenheit
         } catch (error) {
             console.error(error);
         }

@@ -1,5 +1,5 @@
 export default class WeatherAPI {
-    static apiKey = 'd78383fe2a464ec38e68e5e0712d2a42';
+    static apiKey = 'fdfc8bfc5ffd429d8a6140022233007'; // Update with your WeatherAPI.com API key
 
     static async getCurrentLocation() {
         return new Promise((resolve, reject) => {
@@ -21,9 +21,9 @@ export default class WeatherAPI {
     static async getCurrentWeather() {
         try {
             const location = await WeatherAPI.getCurrentLocation();
-            const response = await fetch(`https://api.weatherbit.io/v2.0/current?lat=${location.lat}&lon=${location.lon}&key=${WeatherAPI.apiKey}`);
+            const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=${WeatherAPI.apiKey}&q=${location.lat},${location.lon}`);
             const data = await response.json();
-            return data.data[0];
+            return data.current;
         } catch (error) {
             console.error(error);
             return null;

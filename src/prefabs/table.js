@@ -85,10 +85,11 @@ export default class Table {
     /* For this purpose, uses the values of colorsArray.
     */
     update() {
-        const updateCell = (x, y, pieceIndex) => {
-            if (pieceIndex) {
+        const updateCell = (x, y, tint) => {
+            if (tint) {
                 this.cellsArray[y][x]
-                    .setTexture('atlas', 'p' + pieceIndex)
+                    .setTexture('atlas', 'p1')  // Use a constant texture for all cells
+                    .setTint(tint)  // Apply the tint
                     .setVisible(true);
             } else {
                 this.cellsArray[y][x]

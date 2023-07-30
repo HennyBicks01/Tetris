@@ -44,15 +44,15 @@ export default class Load extends Phaser.Scene {
 
     async loadWeatherData() {
         try {
-            const locationData = await WeatherAPI.getCurrentLocation();
-            const weatherData = await WeatherAPI.getCurrentWeather(locationData);
-            const temp = weatherData.temp;
+            const weatherData = await WeatherAPI.getCurrentWeather();
+            const temp = weatherData.temp_c; // Use temp_c for temperature in Celsius, or temp_f for Fahrenheit
             // Store the temperature in the game's global data store
             this.registry.set('currentTemp', temp);
         } catch (error) {
             console.error(error);
         }
     }
+    
     updateText(progress) {
         this.text_loading.setText(`Loading ... ${Math.round(progress * 100)}%`);
     }
