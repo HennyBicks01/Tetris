@@ -64,20 +64,6 @@ export default class InGame extends Phaser.Scene {
 
         this.controls = new Controls(this);
 
-        //// Sounds
-        this.snd_explosion = this.sound.add('explosion');
-        this.snd_line = this.sound.add('line');
-        this.snd_spin = this.sound.add('spin').setVolume(0.8);
-        this.snd_down = this.sound.add('knock').setVolume(0.4);
-        this.snd_levelup = this.sound.add('levelup');
-        this.snd_score4 = this.sound.add('score4');
-        this.snd_move = this.sound.add('move').setVolume(0.4);
-
-        // Music
-        this.music_gameover = this.sound.add('gameover');
-        this.music_ingame = this.sound.add('ingame', { volume: 0.4, loop: true });
-        this.music_ingame.play();
-
         // Tweens
         this.tween_ui = this.tweens.add({
             targets: this.ui_mask,
@@ -96,7 +82,6 @@ export default class InGame extends Phaser.Scene {
             'EXPLODE_ALL': 'explodeall'
         }
 
-
         customEmitter.on(customEvents.PIECE_TOUCH_DOWN, this.onPieceDown, this);
         customEmitter.on(customEvents.LEVEL_UP, this.onLevelUp, this);
         customEmitter.on(customEvents.GAME_OVER, this.onGameOver, this);
@@ -104,7 +89,6 @@ export default class InGame extends Phaser.Scene {
         customEmitter.on(customEvents.X4_LINES, this.onX4Lines, this);
 
         this.timeCounter = 0;
-
     }
 
     async loadWeatherData() {
@@ -205,12 +189,11 @@ export default class InGame extends Phaser.Scene {
 
         this.input.keyboard.removeAllKeys();
 
-        this.music_ingame.stop();
+        // Commented out sound effects
+        // this.music_ingame.stop();
+        // this.music_gameover.play();
 
-        this.music_gameover.play();
-        this.music_gameover.on('complete', () => {
-            this.table.explodeAll(); // emits event explodeall when finished
-        });
+        this.table.explodeAll(); // emits event explodeall when finished
     }
 
 
@@ -225,7 +208,8 @@ export default class InGame extends Phaser.Scene {
 
         this.gameOverMask.setAlpha(0.6);
 
-        this.snd_levelup.play();
+        // Commented out sound effect
+        // this.snd_levelup.play();
 
         let t = this;
         this.tweens.add({
@@ -243,10 +227,12 @@ export default class InGame extends Phaser.Scene {
             h.setCookie(COOKIE_TOP, this.score, 365);
             setTimeout(() => {
                 this.ui_higscore.setVisible(true);
-                this.snd_line.play();
+                // Commented out sound effect
+                // this.snd_line.play();
                 this.cameras.main.shake(60, 0.03);
                 setTimeout(() => {
-                    this.snd_score4.play();
+                    // Commented out sound effect
+                    // this.snd_score4.play();
                     this.ui_gameover_click.setVisible(true);
                     this.input.on('pointerdown', () => {
                         this.scene.start('menu');
@@ -290,17 +276,16 @@ export default class InGame extends Phaser.Scene {
 
     onLevelUp(level) {
         this.ui_level.setText(level);
-        this.snd_levelup.play();
+        // Commented out sound effect
+        // this.snd_levelup.play();
         this.tween_ui.play();
         let gravity = GRAVITY_LEVELS[this.table.level];
         this.stepDelay = gravity ? gravity * MILLISECONDS_PER_FRAME : 1;
     }
 
 
-
     onPieceDown() {
         this.controls.initDown();
-        this.snd_down.play();
         // Draws the piece
         this.piece.print();
         // Score of softDrop
@@ -321,13 +306,13 @@ export default class InGame extends Phaser.Scene {
         // Inits the piece
         this.piece.init(this.pieceQueue.current);
     }
-
-
+    
 
     onX4Lines() {
         this.cameras.main.shake(200, 0.02);
-        this.snd_explosion.play();
-        this.snd_score4.play();
+        // Commented out sound effects
+        // this.snd_explosion.play();
+        // this.snd_score4.play();
     }
 
 }

@@ -175,7 +175,6 @@ export default class Table {
         let y = this.y + this.height * 38 - ((rowIndex + 1) - 0.5) * this.cellHeight;
         this.particlesEmitter.setPosition(this.x, y);
         this.particlesEmitter.explode();
-        this.scene.snd_line.play();
     }
 
     explodeAll() {
@@ -195,7 +194,6 @@ export default class Table {
                 cell.setVisible(false);
                 this.particlesEmitter.setPosition(cell.x, cell.y);
                 this.particlesEmitter.explode();
-                this.scene.snd_line.play();
                 this.scene.cameras.main.shake(50, 0.005);
                 cellsToExplode--;
                 if(cellsToExplode < 1){

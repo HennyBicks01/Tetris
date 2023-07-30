@@ -6,7 +6,7 @@ export default class Controls {
         this.piece = scene.piece;
         this.table = scene.table;
 
-        // Used to apply DAS behavior to rigth and left controls
+        // Used to apply DAS behavior to right and left controls
         this.counter = 0;
 
         // Avoids immediate down action after piece spawn
@@ -74,26 +74,20 @@ export default class Controls {
     } // End update()
 
     moveLeft() {
-
         this.piece.clear();
         this.piece.x--;
         if (this.piece.checkCollision()) {
             this.piece.x++;
-        } else {
-            this.scene.snd_move.play();
         }
         this.piece.print();
         this.table.update();
     }
 
     moveRight() {
-
         this.piece.clear();
         this.piece.x++;
         if (this.piece.checkCollision()) {
             this.piece.x--;
-        } else {
-            this.scene.snd_move.play();
         }
         this.piece.print();
         this.table.update();
@@ -108,7 +102,6 @@ export default class Controls {
         if (collision) {
             spin2();
         }
-        this.scene.snd_spin.play();
         this.piece.print();
         this.table.update();
     }
