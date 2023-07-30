@@ -6,7 +6,6 @@ export default class Load extends Phaser.Scene {
     }
 
     preload() {
-        this.loadWeatherData();
 
         let logo = this.add.image(centerX, centerY, 'atlas-menu', 'logowhite');
         this.text_loading = this.add.text(logo.x, logo.y + 150, 'Loading...', 30)
@@ -40,12 +39,13 @@ export default class Load extends Phaser.Scene {
 
         this.load.on('progress', this.updateText, this);
 
+        this.loadWeatherData();
     }
 
     async loadWeatherData() {
         try {
-            const weatherAPI = new WeatherAPI('your_api_key_here');
-            const weatherData = await weatherAPI.getCurrentWeather();
+            const locationData = await WeatherAPI.getCurrentLocation();
+            const weatherData = await WeatherAPI.getCurrentWeather(locationData);
             const temp = weatherData.temp;
             // Store the temperature in the game's global data store
             this.registry.set('currentTemp', temp);
@@ -53,7 +53,6 @@ export default class Load extends Phaser.Scene {
             console.error(error);
         }
     }
-
     updateText(progress) {
         this.text_loading.setText(`Loading ... ${Math.round(progress * 100)}%`);
     }

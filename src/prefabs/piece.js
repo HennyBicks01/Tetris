@@ -1,9 +1,13 @@
+import InGame from '../scenes/ingame.js';
+import Load from '../scenes/load.js';
 import { SHAPES, SHAPE_SPAWN } from './constants.js';
+import { PIECE_TYPES } from './constants.js'
 import WeatherAPI from './weatherAPI.js';
 export default class Piece {
     constructor(scene, pieceType, tableArray, tint) {
         this.scene = scene;
         this.tableArray = tableArray;
+        this.type = pieceType;
 
         this.width = 0;
         this.height = 0;
@@ -13,9 +17,7 @@ export default class Piece {
         this.shape = [];
         this.frame = [];
         this.color = 0;
-        this.type = pieceType;
         this.tint = 0xffffff;
-
         this.init();
     }
 
@@ -25,10 +27,11 @@ export default class Piece {
         if (type) {
             this.type = type;
         }
-        this.initShape();
+        this.initShape(this.type); 
         this.setSize();
         this.initPosition();
         this.setTintBasedOnTemp();
+        
     }
 
     initColor() {
@@ -77,35 +80,44 @@ export default class Piece {
         this.width = this.frame[0].length;
         this.height = this.frame.length;
     }
-
+    
 
     async setTintBasedOnTemp() {
-        // Fetch the temperature from the WeatherAPI
-        const weather = await WeatherAPI.getCurrentWeather();
-        const temp = weather.temp;
-
-        // Define the RGB values for the cold and hot colors
-        const coldColor = { r: 0, g: 0, b: 255 }; // Blue
-        const hotColor = { r: 255, g: 0, b: 0 }; // Red
-
-        // Define the temperature range
-        const minTemp = -10;
-        const maxTemp = 40;
-
-        // Clamp the temperature to the defined range
-        const clampedTemp = Math.max(minTemp, Math.min(maxTemp, temp));
-
-        // Normalize the temperature to a value between 0 and 1
-        const normalizedTemp = (clampedTemp - minTemp) / (maxTemp - minTemp);
-
-        // Interpolate between the cold and hot colors based on the normalized temperature
-        const r = Math.round(Phaser.Math.Linear(coldColor.r, hotColor.r, normalizedTemp));
-        const g = Math.round(Phaser.Math.Linear(coldColor.g, hotColor.g, normalizedTemp));
-        const b = Math.round(Phaser.Math.Linear(coldColor.b, hotColor.b, normalizedTemp));
-
-        // Convert the RGB color to a Phaser color tint
-        this.tint = Phaser.Display.Color.GetColor(r, g, b);
+        try {
+            // Fetch the temperature from the WeatherAPI
+            const weatherData = await WeatherAPI.getCurrentWeather();
+            console.log('Weather Data:', weatherData);
+    
+            const temp = weatherData.temp;
+    
+            // Define the RGB values for the cold and hot colors
+            const coldColor = { r: 0, g: 0, b: 255 }; // Blue
+            const hotColor = { r: 255, g: 0, b: 0 }; // Red
+    
+            // Define the temperature range
+            const minTemp = -10;
+            const maxTemp = 40;
+    
+            // Clamp the temperature to the defined range
+            const clampedTemp = Math.max(minTemp, Math.min(maxTemp, temp));
+    
+            // Normalize the temperature to a value between 0 and 1
+            const normalizedTemp = (clampedTemp - minTemp) / (maxTemp - minTemp);
+            console.log('Normalized Temperature:', normalizedTemp);
+    
+            // Interpolate between the cold and hot colors based on the normalized temperature
+            const r = Math.round(Phaser.Math.Linear(coldColor.r, hotColor.r, normalizedTemp));
+            const g = Math.round(Phaser.Math.Linear(coldColor.g, hotColor.g, normalizedTemp));
+            const b = Math.round(Phaser.Math.Linear(coldColor.b, hotColor.b, normalizedTemp));
+            console.log('r:', r, 'g:', g, 'b:', b);
+    
+            // Convert the RGB color to a Phaser color tint
+            this.tint = Phaser.Display.Color.GetColor(r, g, b);
+        } catch (error) {
+            console.error(error);
+        }
     }
+    
 
     /**
      * Checks piece frame on the table space for collisions.
@@ -131,19 +143,25 @@ export default class Piece {
         this.print(true)
     }
 
-    print(isDelete = false) {
-        const table = this.tableArray;
-        this.frame.forEach((row, rowIndex) => {
-            row.forEach((v, columnIndex) => {
-                let position = this.localToTable(columnIndex, rowIndex);
-                if (v && !isDelete && position.y <= this.scene.table.topVisibleRow) {
-                    table[position.y][position.x] = this.color;
-                } else if (v && isDelete) {
-                    table[position.y][position.x] = 0;
+    print() {
+        this.shape[PIECE_TYPES[this.type]].forEach((row, y) => {
+            row.forEach((value, x) => {
+                if (value) {
+                    const tile = this.scene.add.image(
+                        this.x + x * this.cellSize,
+                        this.y + y * this.cellSize,
+                        'atlas',
+                        PIECE_TYPES[this.type] // Use the PIECE_TYPES constant here
+                    );
+                    // Apply the tint to the tile
+                    tile.setTint(this.tint);
+                    this.tiles.push(tile);
                 }
             });
         });
     }
+    
+    
 
     localToTable(localX, localY) {
         let tableY = this.y - this.height + 1 + localY;

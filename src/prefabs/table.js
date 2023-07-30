@@ -2,7 +2,7 @@ export default class Table {
 
     constructor(scene) {
         this.scene = scene;
-
+        
         this.cellWidth = 38;
         this.cellHeight = 38;
         this.width = 10; // in cells

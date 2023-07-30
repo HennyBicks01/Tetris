@@ -1,9 +1,7 @@
 export default class WeatherAPI {
-    constructor(apiKey) {
-        this.apiKey = 'd78383fe2.464ec38e68e5e0712d2a42';
-    }
+    static apiKey = 'd78383fe2a464ec38e68e5e0712d2a42';
 
-    async getCurrentLocation() {
+    static async getCurrentLocation() {
         return new Promise((resolve, reject) => {
             if ('geolocation' in navigator) {
                 navigator.geolocation.getCurrentPosition((position) => {
@@ -20,10 +18,10 @@ export default class WeatherAPI {
         });
     }
 
-    async getCurrentWeather() {
+    static async getCurrentWeather() {
         try {
-            const location = await this.getCurrentLocation();
-            const response = await fetch(`https://api.weatherbit.io/v2.0/current?lat=${location.lat}&lon=${location.lon}&key=${this.apiKey}`);
+            const location = await WeatherAPI.getCurrentLocation();
+            const response = await fetch(`https://api.weatherbit.io/v2.0/current?lat=${location.lat}&lon=${location.lon}&key=${WeatherAPI.apiKey}`);
             const data = await response.json();
             return data.data[0];
         } catch (error) {

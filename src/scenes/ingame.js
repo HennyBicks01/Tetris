@@ -2,7 +2,7 @@ import Table from '../prefabs/table.js';
 import Controls from '../prefabs/controls.js';
 import Piece from '../prefabs/piece.js';
 import * as h from '../prefabs/helpers.js';
-import weatherAPI from '../prefabs/weatherAPI.js'
+import WeatherAPI from '../prefabs/weatherAPI.js'
 
 import {
     GRAVITY_LEVELS,
@@ -27,6 +27,14 @@ export default class InGame extends Phaser.Scene {
     }
 
     create() {
+
+        this.loadWeatherData();
+
+        this.table = new Table(this);
+        const tintValue = 0x9a2a33; // Replace this with the desired tint color
+        this.piece = new Piece(this, this.pieceQueue.current, this.table.colorsArray, tintValue);
+        this.piece.print();
+        this.table.update();
 
         // Emitter
         this.customEmitter = new Phaser.Events.EventEmitter();
@@ -97,6 +105,15 @@ export default class InGame extends Phaser.Scene {
 
         this.timeCounter = 0;
 
+    }
+
+    async loadWeatherData() {
+        try {
+            const weatherData = await WeatherAPI.getCurrentWeather();
+            this.weatherTemperature = weatherData.temp;
+        } catch (error) {
+            console.error(error);
+        }
     }
 
 
