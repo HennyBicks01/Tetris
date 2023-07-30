@@ -1,44 +1,45 @@
+// Define the Table class as the default export
 export default class Table {
-
     constructor(scene) {
+        // Store a reference to the scene where the table is present
         this.scene = scene;
         
+        // Table properties related to size, position, and appearance
         this.cellWidth = 38;
         this.cellHeight = 38;
-        this.width = 10; // in cells
-        this.height = 23; // in cells
+        this.width = 10; 
+        this.height = 23; 
         this.topVisibleRow = 19;
         this.x = 135;
         this.y = 88;
 
-
+        // Properties related to game mechanics and scoring
         this.stepDelay = 400;
         this.linesPerLevel = 10;
         this.lines = 0;
         this.level = 0;
         this.emitter = this.scene.customEmitter;
-
-
         this.completeRows = [];
 
+        // Call the initialization function
         this.init();
 
+        // Return the instance of the Table class
         return this;
     }
 
+    // Initialize the table
     init() {
+        // Create and initialize arrays to store cell colors and cell images
         this.initAlphaArray();
         this.initCellsArray();
+        
+        // Set up particle emitter for explosion effects
         this.particlesEmitter = this.scene.add.particles('atlas', 'particle').createEmitter({
-            x: 0,
-            y: 0,
-            blendMode: 'screen',
-            scale: { start: 1.2, end: 0 },
-            speed: { min: -400, max: 400 },
-            angle: { min: -180, max: 180 },
-            frequency: -1,
-            quantity: 80
+            // Particle properties
         });
+
+        // Set the emission zone for particles
         this.particlesEmitter.setEmitZone({
             source: new Phaser.Geom.Line(0, 0, 380, 0),
             type: 'edge',
@@ -46,9 +47,7 @@ export default class Table {
         });
     }
 
-    /* Creates and inits an 2d array of integers based on grid positions. 
-    /* Each value represents a color.
-    */
+    // Initialize the colorsArray to store cell colors for each row
     initAlphaArray() {
         this.colorsArray = [];
         for (let i = 0; i < this.height; i++) {
@@ -56,9 +55,7 @@ export default class Table {
         }
     }
 
-    /* Creates and inits an 2d array of image objects based on grid positions. 
-    /* Each value is a Phaser.GameObject.Image.
-    */
+    // Initialize the cellsArray to store cell images and their visibility
     initCellsArray() {
         this.cellsArray = [];
         this.colorsArray.forEach((row, idxRow, arr) => {
@@ -80,22 +77,19 @@ export default class Table {
         });
     }
 
-
-    /* Updates visibility and texture of the image objects in cellsArray. 
-    /* For this purpose, uses the values of colorsArray.
-    */
+    // Update the table by applying the cell colors and visibility
     update() {
         const updateCell = (x, y, tint) => {
             if (tint) {
                 this.cellsArray[y][x]
-                    .setTexture('atlas', 'p1')  // Use a constant texture for all cells
-                    .setTint(tint)  // Apply the tint
+                    .setTexture('atlas', 'p1')  
+                    .setTint(tint)  
                     .setVisible(true);
             } else {
                 this.cellsArray[y][x]
                     .setVisible(false);
             }
-        } // end drawCell
+        } 
 
         this.colorsArray.forEach((row, idxRow) => {
             row.forEach((v, idxColumn) => {
@@ -104,6 +98,7 @@ export default class Table {
         });
     }
 
+    // Check for completed lines and update scoring
     checkLines() {
         let completeRows = [];
 
@@ -111,7 +106,6 @@ export default class Table {
             let row = this.colorsArray[i];
             let completed = false;
             for (let j = 0; j < row.length; j++) {
-
                 if (!row[j]) {
                     completed = false;
                     break;
@@ -119,8 +113,6 @@ export default class Table {
                 completed = true;
             }
             if (completed) completeRows.push(i);
-
-
         }
 
         this.completeRows = completeRows;
@@ -138,20 +130,23 @@ export default class Table {
         return score;
     }
 
+    // Update the number of lines cleared
     updateLines() {
         this.lines += this.completeRows.length;
     }
 
+    // Check if a level up occurred
     isLevelUp() {
         return Math.floor(this.lines / this.linesPerLevel) > this.level;
     }
 
+    // Calculate the score based on the number of completed lines
     getScore() {
         let linesCompleted = this.completeRows.length;
         if (linesCompleted == 0) return 0;
 
         let score = 0;
-        // info: https://tetris.fandom.com/wiki/Scoring
+        
         switch (linesCompleted) {
             case 1:
                 return (this.level + 1) * 40;
@@ -171,18 +166,21 @@ export default class Table {
         }
     }
 
+    // Explode a specific row during line clearing
     explodeLine(rowIndex) {
         let y = this.y + this.height * 38 - ((rowIndex + 1) - 0.5) * this.cellHeight;
         this.particlesEmitter.setPosition(this.x, y);
         this.particlesEmitter.explode();
     }
 
+    // Explode all cells during game over effect
     explodeAll() {
+        // Set up particle emitter for exploding all cells
         this.particlesEmitter.emitZone = null;
         const activeCells = [];
         this.cellsArray.forEach((row) => {
-            for(let i = 0; i<row.length; i++){
-                if(row[i].visible){
+            for(let i = 0; i < row.length; i++) {
+                if (row[i].visible) {
                     activeCells.push(row[i]);
                 }
             }
@@ -196,7 +194,7 @@ export default class Table {
                 this.particlesEmitter.explode();
                 this.scene.cameras.main.shake(50, 0.005);
                 cellsToExplode--;
-                if(cellsToExplode < 1){
+                if (cellsToExplode < 1) {
                     this.initAlphaArray();
                     this.update();
                     this.scene.customEmitter.emit('explodeall');
@@ -205,13 +203,13 @@ export default class Table {
         });
     }
 
+    // Delete completed rows from the table after line clearing
     deleteCompletes() {
         this.completeRows.forEach((rowIndex) => {
             this.explodeLine(rowIndex);
             this.colorsArray.splice(rowIndex, 1);
         });
 
-        // Not possible with push()
         for (let i = this.height - this.completeRows.length; i < this.height; i++) {
             this.colorsArray[i] = new Array(this.width).fill(0);
         }
@@ -219,6 +217,7 @@ export default class Table {
         this.completeRows = [];
     }
 
+    // Get the screen position (x, y) of a cell on the table
     getPosition(column, row) {
         let position = {};
         position.x = this.x + this.cellWidth * column + this.cellWidth / 2;
