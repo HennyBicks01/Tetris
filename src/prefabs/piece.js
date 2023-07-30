@@ -1,6 +1,5 @@
 import { SHAPES, SHAPE_SPAWN } from './constants.js';
-import WeatherAPI from './WeatherAPI.js';
-
+import WeatherAPI from './weatherAPI.js';
 export default class Piece {
     constructor(scene, pieceType, tableArray, tint) {
         this.scene = scene;

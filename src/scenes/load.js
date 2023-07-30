@@ -1,16 +1,20 @@
+import WeatherAPI from '../prefabs/weatherAPI.js'; // import WeatherAPI
+
 export default class Load extends Phaser.Scene {
     constructor() {
         super('load');
     }
 
     preload() {
+        this.loadWeatherData();
 
         let logo = this.add.image(centerX, centerY, 'atlas-menu', 'logowhite');
         this.text_loading = this.add.text(logo.x, logo.y + 150, 'Loading...', 30)
             .setOrigin(0.5);
 
         this.load.on('complete', function () {
-            this.scene.start('menu');
+            // Pass the current weather to the next scene
+            this.scene.start('menu', { currentWeather: this.currentWeather });
         }, this);
 
         // Images
@@ -36,6 +40,18 @@ export default class Load extends Phaser.Scene {
 
         this.load.on('progress', this.updateText, this);
 
+    }
+
+    async loadWeatherData() {
+        try {
+            const weatherAPI = new WeatherAPI('your_api_key_here');
+            const weatherData = await weatherAPI.getCurrentWeather();
+            const temp = weatherData.temp;
+            // Store the temperature in the game's global data store
+            this.registry.set('currentTemp', temp);
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     updateText(progress) {

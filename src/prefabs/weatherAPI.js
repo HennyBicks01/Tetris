@@ -1,6 +1,6 @@
-class WeatherAPI {
+export default class WeatherAPI {
     constructor(apiKey) {
-        this.apiKey = 'd78383fe2a464ec38e68e5e0712d2a42';
+        this.apiKey = 'd78383fe2.464ec38e68e5e0712d2a42';
     }
 
     async getCurrentLocation() {
