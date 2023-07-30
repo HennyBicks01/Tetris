@@ -111,24 +111,24 @@ export default class Piece {
             let r, g, b;
     
             // If the normalized temperature is in the first half of the range (0.0 to 0.5)
-            if (normalizedTemp <= 0.5) {
+            if (normalizedTemp <= 0.4) {
                 // Adjust the normalized temperature to the range 0.0 to 1.0
                 const adjustedTemp = normalizedTemp * 2;
     
-                // Interpolate between the hot and moderate colors based on the adjusted temperature
-                r = Math.round(Phaser.Math.Linear(hotColor.r, moderateColor.r, adjustedTemp));
-                g = Math.round(Phaser.Math.Linear(hotColor.g, moderateColor.g, adjustedTemp));
-                b = Math.round(Phaser.Math.Linear(hotColor.b, moderateColor.b, adjustedTemp));
+                // Interpolate between the cold and moderate colors based on the adjusted temperature
+                r = Math.round(Phaser.Math.Linear(coldColor.r, moderateColor.r, adjustedTemp));
+                g = Math.round(Phaser.Math.Linear(coldColor.g, moderateColor.g, adjustedTemp));
+                b = Math.round(Phaser.Math.Linear(coldColor.b, moderateColor.b, adjustedTemp));
             } 
             // If the normalized temperature is in the second half of the range (0.5 to 1.0)
             else {
                 // Adjust the normalized temperature to the range 0.0 to 1.0
-                const adjustedTemp = (normalizedTemp - 0.5) * 2;
+                const adjustedTemp = (normalizedTemp - 0.4) * 2;
     
-                // Interpolate between the moderate and cold colors based on the adjusted temperature
-                r = Math.round(Phaser.Math.Linear(moderateColor.r, coldColor.r, adjustedTemp));
-                g = Math.round(Phaser.Math.Linear(moderateColor.g, coldColor.g, adjustedTemp));
-                b = Math.round(Phaser.Math.Linear(moderateColor.b, coldColor.b, adjustedTemp));
+                // Interpolate between the moderate and hot colors based on the adjusted temperature
+                r = Math.round(Phaser.Math.Linear(moderateColor.r, hotColor.r, adjustedTemp));
+                g = Math.round(Phaser.Math.Linear(moderateColor.g, hotColor.g, adjustedTemp));
+                b = Math.round(Phaser.Math.Linear(moderateColor.b, hotColor.b, adjustedTemp));
             }
     
             console.log('r:', r, 'g:', g, 'b:', b);
@@ -139,6 +139,7 @@ export default class Piece {
             console.error(error);
         }
     }
+    
 
     /**
      * Checks piece frame on the table space for collisions.

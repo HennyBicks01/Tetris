@@ -17,10 +17,6 @@ export default class Menu extends Phaser.Scene {
         this.add.image(0, 0, 'atlas', 'table')
             .setOrigin(0);
 
-        // Sounds
-        this.snd_play = this.sound.add('go');
-        this.snd_button = this.sound.add('button');
-
         // Menu contents
         this.createContents();
 
@@ -50,7 +46,6 @@ export default class Menu extends Phaser.Scene {
         this.bt_play = this.add.image(centerX, originYbt, 'atlas-menu', 'btplay')
             .setInteractive();
         this.bt_play.on('pointerdown', () => {
-            this.snd_play.play();
             this.scene.start('inGame');
         });
 
@@ -58,7 +53,6 @@ export default class Menu extends Phaser.Scene {
         this.bt_controls = this.add.image(centerX, originYbt + 1 * 130, 'atlas-menu', 'btcontrols')
             .setInteractive();
         this.bt_controls.on('pointerdown', () => {
-            this.snd_button.play();
             this.menuCamera.pan(2000 + 406 * 2 + 406 / 2, 2000, 300 * 2, 'Bounce');
         });
 
@@ -66,7 +60,6 @@ export default class Menu extends Phaser.Scene {
         this.bt_credits = this.add.image(centerX, originYbt + 2 * 130, 'atlas-menu', 'btcredits')
             .setInteractive();
         this.bt_credits.on('pointerdown', () => {
-            this.snd_button.play();
             this.menuCamera.pan(2000 + 406 * 1 + 406 / 2, 2000, 300, 'Bounce');
         });
 
@@ -81,7 +74,6 @@ export default class Menu extends Phaser.Scene {
             .setInteractive();
 
         this.bt_back_credits.on('pointerdown', () => {
-            this.snd_button.play();
             this.menuCamera.pan(2000, 2000, 300, 'Bounce');
         });
 
@@ -96,7 +88,6 @@ export default class Menu extends Phaser.Scene {
             .setInteractive();
 
         this.bt_back_controls.on('pointerdown', () => {
-            this.snd_button.play();
             this.menuCamera.pan(2000, 2000, 300, 'Bounce');
         });
     }
