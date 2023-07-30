@@ -1,24 +1,11 @@
-// Cookie name for last score
 export const COOKIE_LAST = 'lastscore';
-
-// Cookie name for top score
 export const COOKIE_TOP = 'topscore';
-
-// Milliseconds of one frame at 60 frames per second
 export const MILLISECONDS_PER_FRAME = 1000 / 60;
-
-// Time delay before keys autorepeat
 export const DAS_DELAY = 16 * MILLISECONDS_PER_FRAME;
-
-// Time interval between keys repetitions
 export const AUTOREPEAT_INTERVAL = 6 * MILLISECONDS_PER_FRAME;
-
-// Time interval between table steps when softdrop is active
 export const SOFTDROP_DELAY = 1.5 * MILLISECONDS_PER_FRAME;
-
-// Frames per cell
 export const GRAVITY_LEVELS = [
-    48, // lv 0
+    48, 
     43,
     38,
     33,
@@ -30,13 +17,13 @@ export const GRAVITY_LEVELS = [
     6,
     5,
     5,
-    5, // lv 12
+    5, 
     4,
     4,
-    4, // lv 15
+    4, 
     3,
     3,
-    3, // lv 18
+    3, 
     2,
     2,
     2,
@@ -46,8 +33,8 @@ export const GRAVITY_LEVELS = [
     2,
     2,
     2,
-    2, // lv 28
-    28 // lv 29+
+    2, 
+    28 
 ]
 export const PIECE_TYPES = new Map();
 PIECE_TYPES.set(1, 'O');
@@ -68,16 +55,14 @@ SHAPE_SPAWN.set(6, { col: 3, row: 20 });
 SHAPE_SPAWN.set(7, { col: 3, row: 21 });
 
 export const SHAPES = {
-    // Piece O
     1: [
         [
             [1, 1], [1, 1]
         ]
     ],
-    // Piece T
     2: [
         [
-            [0, 1, 0], [1, 1, 1], [0, 0, 0] // Initial position
+            [0, 1, 0], [1, 1, 1], [0, 0, 0] 
         ],
         [
             [0, 1, 0], [1, 1, 0], [0, 1, 0]
@@ -89,28 +74,27 @@ export const SHAPES = {
             [0, 1, 0], [0, 1, 1], [0, 1, 0]
         ]
     ],
-    // Piece Z
     3: [
         [
-            [0, 1, 1], [1, 1, 0], [0, 0, 0] // Initial position
+            [0, 1, 1], [1, 1, 0], [0, 0, 0] 
         ],
         [
             [0, 1, 0], [0, 1, 1], [0, 0, 1]
         ]
     ],
-    // Piece S
+
     4: [
         [
-            [1, 1, 0], [0, 1, 1], [0, 0, 0] // Initial position
+            [1, 1, 0], [0, 1, 1], [0, 0, 0] 
         ],
         [
             [0, 0, 1], [0, 1, 1], [0, 1, 0]
         ]
     ],
-    // Piece J
+    
     5: [
         [
-            [0, 0, 1], [1, 1, 1], [0, 0, 0] // Initial position
+            [0, 0, 1], [1, 1, 1], [0, 0, 0] 
         ],
         [
             [1, 1, 0], [0, 1, 0], [0, 1, 0]
@@ -122,10 +106,10 @@ export const SHAPES = {
             [0, 1, 0], [0, 1, 0], [0, 1, 1]
         ]
     ],
-    // Piece L
+    
     6: [
         [
-            [1, 0, 0], [1, 1, 1], [0, 0, 0] // Initial position
+            [1, 0, 0], [1, 1, 1], [0, 0, 0] 
         ],
         [
             [0, 1, 0], [0, 1, 0], [1, 1, 0]
@@ -137,13 +121,13 @@ export const SHAPES = {
             [0, 1, 1], [0, 1, 0], [0, 1, 0]
         ]
     ],
-    // Piece I
+    
     7: [
         [
-            [0, 0, 0, 0], [1, 1, 1, 1], [0, 0, 0, 0], [0, 0, 0, 0] // Initial position
+            [0, 0, 0, 0], [1, 1, 1, 1], [0, 0, 0, 0], [0, 0, 0, 0] 
         ],
         [
             [0, 0, 1, 0], [0, 0, 1, 0], [0, 0, 1, 0], [0, 0, 1, 0]
         ]
     ]
-} // end pieces
+} 
