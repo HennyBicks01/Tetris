@@ -5,14 +5,9 @@ export default class Controls {
         this.scene = scene;
         this.piece = scene.piece;
         this.table = scene.table;
-
-        // Used to apply DAS behavior to rigth and left controls
         this.counter = 0;
-
-        // Avoids immediate down action after piece spawn
         this.downIsActive = false;
         this.softDrop = false;
-
         this.init();
     }
 
@@ -28,9 +23,6 @@ export default class Controls {
         this.keyZ.on('down', () => {
             this.spin(false);
         });
-
-        // cursor left
-
         this.cursors.left.on('up', () => {
             this.counter = 0;
         });
@@ -39,9 +31,6 @@ export default class Controls {
             this.moveLeft();
             this.counter = DAS_DELAY;
         });
-
-        // cursor right
-
         this.cursors.right.on('up', () => {
             this.counter = 0;
         });
@@ -71,7 +60,7 @@ export default class Controls {
             this.counter += AUTOREPEAT_INTERVAL;
         }
 
-    } // End update()
+    } 
 
     moveLeft() {
 

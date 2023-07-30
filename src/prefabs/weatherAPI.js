@@ -1,5 +1,5 @@
 export default class WeatherAPI {
-    static apiKey = 'fdfc8bfc5ffd429d8a6140022233007'; // Update with your WeatherAPI.com API key
+    static apiKey = 'fdfc8bfc5ffd429d8a6140022233007'; 
 
     static async getCurrentLocation() {
         return new Promise((resolve, reject) => {

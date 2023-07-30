@@ -18,7 +18,7 @@ export default class Piece {
         this.frame = [];
         this.color = 0;
         this.tint = 0xffffff;
-        this.tiles = []; // Initialize this.tiles
+        this.tiles = []; 
         this.init();
     }
     
@@ -86,63 +86,37 @@ export default class Piece {
 
     async setTintBasedOnTemp() {
         try {
-            // Fetch the temperature from the WeatherAPI
             const weatherData = await WeatherAPI.getCurrentWeather();
             console.log('Weather Data:', weatherData);
     
-            const temp = weatherData.temp_c; // Use temp_c for temperature in Celsius, or temp_f for Fahrenheit
-    
-            // Define the RGB values for the cold, moderate, and hot colors
-            const coldColor = { r: 0, g: 0, b: 255 }; // Blue
-            const moderateColor = { r: 0, g: 255, b: 0 }; // Green
-            const hotColor = { r: 255, g: 0, b: 0 }; // Red
-    
-            // Define the temperature range
+            const temp = weatherData.temp_c; 
+            const coldColor = { r: 0, g: 0, b: 255 }; 
+            const moderateColor = { r: 0, g: 255, b: 0 }; 
+            const hotColor = { r: 255, g: 0, b: 0 }; 
             const minTemp = -10;
             const maxTemp = 40;
-    
-            // Clamp the temperature to the defined range
             const clampedTemp = Math.max(minTemp, Math.min(maxTemp, temp));
-    
-            // Normalize the temperature to a value between 0 and 1
             const normalizedTemp = (clampedTemp - minTemp) / (maxTemp - minTemp);
             console.log('Normalized Temperature:', normalizedTemp);
-    
-            let r, g, b;
-    
-            // If the normalized temperature is in the first half of the range (0.0 to 0.5)
+            let r, g, b;    
             if (normalizedTemp <= 0.5) {
-                // Adjust the normalized temperature to the range 0.0 to 1.0
                 const adjustedTemp = normalizedTemp * 2;
-    
-                // Interpolate between the hot and moderate colors based on the adjusted temperature
                 r = Math.round(Phaser.Math.Linear(hotColor.r, moderateColor.r, adjustedTemp));
                 g = Math.round(Phaser.Math.Linear(hotColor.g, moderateColor.g, adjustedTemp));
                 b = Math.round(Phaser.Math.Linear(hotColor.b, moderateColor.b, adjustedTemp));
             } 
-            // If the normalized temperature is in the second half of the range (0.5 to 1.0)
             else {
-                // Adjust the normalized temperature to the range 0.0 to 1.0
                 const adjustedTemp = (normalizedTemp - 0.5) * 2;
-    
-                // Interpolate between the moderate and cold colors based on the adjusted temperature
                 r = Math.round(Phaser.Math.Linear(moderateColor.r, coldColor.r, adjustedTemp));
                 g = Math.round(Phaser.Math.Linear(moderateColor.g, coldColor.g, adjustedTemp));
                 b = Math.round(Phaser.Math.Linear(moderateColor.b, coldColor.b, adjustedTemp));
             }
-    
             console.log('r:', r, 'g:', g, 'b:', b);
-    
-            // Convert the RGB color to a Phaser color tint
             this.tint = Phaser.Display.Color.GetColor(r, g, b);
         } catch (error) {
             console.error(error);
         }
     }
-
-    /**
-     * Checks piece frame on the table space for collisions.
-     */
     checkCollision() {
         const table = this.tableArray;
         let collision = false;
@@ -177,9 +151,6 @@ export default class Piece {
             });
         });
     }
-    
-    
-
     localToTable(localX, localY) {
         let tableY = this.y - this.height + 1 + localY;
         let tableX = this.x + localX;

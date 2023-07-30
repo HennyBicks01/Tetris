@@ -1,12 +1,11 @@
 export default class Table {
-
     constructor(scene) {
         this.scene = scene;
         
         this.cellWidth = 38;
         this.cellHeight = 38;
-        this.width = 10; // in cells
-        this.height = 23; // in cells
+        this.width = 10; 
+        this.height = 23; 
         this.topVisibleRow = 19;
         this.x = 135;
         this.y = 88;
@@ -45,20 +44,12 @@ export default class Table {
             quantity: 80
         });
     }
-
-    /* Creates and inits an 2d array of integers based on grid positions. 
-    /* Each value represents a color.
-    */
     initAlphaArray() {
         this.colorsArray = [];
         for (let i = 0; i < this.height; i++) {
             this.colorsArray[i] = new Array(this.width).fill(0);
         }
     }
-
-    /* Creates and inits an 2d array of image objects based on grid positions. 
-    /* Each value is a Phaser.GameObject.Image.
-    */
     initCellsArray() {
         this.cellsArray = [];
         this.colorsArray.forEach((row, idxRow, arr) => {
@@ -79,24 +70,18 @@ export default class Table {
             this.cellsArray.push(imgsRow);
         });
     }
-
-
-    /* Updates visibility and texture of the image objects in cellsArray. 
-    /* For this purpose, uses the values of colorsArray.
-    */
     update() {
         const updateCell = (x, y, tint) => {
             if (tint) {
                 this.cellsArray[y][x]
-                    .setTexture('atlas', 'p1')  // Use a constant texture for all cells
-                    .setTint(tint)  // Apply the tint
+                    .setTexture('atlas', 'p1')  
+                    .setTint(tint)  
                     .setVisible(true);
             } else {
                 this.cellsArray[y][x]
                     .setVisible(false);
             }
-        } // end drawCell
-
+        } 
         this.colorsArray.forEach((row, idxRow) => {
             row.forEach((v, idxColumn) => {
                 updateCell(idxColumn, idxRow, v);
@@ -151,7 +136,6 @@ export default class Table {
         if (linesCompleted == 0) return 0;
 
         let score = 0;
-        // info: https://tetris.fandom.com/wiki/Scoring
         switch (linesCompleted) {
             case 1:
                 return (this.level + 1) * 40;
@@ -213,7 +197,6 @@ export default class Table {
             this.colorsArray.splice(rowIndex, 1);
         });
 
-        // Not possible with push()
         for (let i = this.height - this.completeRows.length; i < this.height; i++) {
             this.colorsArray[i] = new Array(this.width).fill(0);
         }
